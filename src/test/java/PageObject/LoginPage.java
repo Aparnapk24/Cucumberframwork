@@ -10,43 +10,53 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import Common.Commonmethod;
+
 public class LoginPage {
 	
 	
-	WebDriver driver;
-	WebDriverWait wait=new WebDriverWait(driver, Duration.ofSeconds(10));
+	public WebDriver driver;
+	public Commonmethod cm;
+	//WebDriverWait wait=new WebDriverWait(driver, Duration.ofSeconds(10));
 	
 	public LoginPage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver,this);
+		cm=new Commonmethod(driver);
 	}
 	
-	@FindBy(name="email")
+	@FindBy(name="user_name")
 	WebElement userid;
 	
-	@FindBy(name="pass")
+	@FindBy(name="user_password")
 	WebElement userpswrd;
 	
-	@FindBy(name="login")
+	@FindBy(name="Login")
 	WebElement login;
+	
+	@FindBy(xpath="//td[contains(text(),\"My Upcoming and Pending Activities\")]")
+	WebElement verifyhome;
 	
 	public void EnterUsername(String usernm)
 	{
-		userid.clear();
-		userid.sendKeys(usernm);
+		cm.EnterValue(userid, usernm);
 	}
 	
 	public void EnterUserpassword(String userpass)
 	{
-		userpswrd.clear();
-		userpswrd.sendKeys(userpass);
+		cm.EnterValue(userpswrd,userpass);
 	}
 	
 	public void ClickonLogin()
 	{
 		
-		login.click();
+		cm.Click(login);
+	}
+	
+	public void VerifyHomePage()
+	{
+		cm.VerifyPage(verifyhome);
 	}
 
 }

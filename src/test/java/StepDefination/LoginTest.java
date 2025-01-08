@@ -1,49 +1,60 @@
 package StepDefination;
 
+import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+
+
 
 import PageObject.LoginPage;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.*;
 
-public class LoginTest {
+
+public class LoginTest extends Baseclass {
 	
-	public WebDriver driver;
+	
 	public LoginPage lp;
+	String TCName;
 	
-	@Given("User luanch chrome browser")
-	public void user_luanch_chrome_browser() {
-	    
-	    WebDriverManager.chromedriver().setup();
-	    driver=new ChromeDriver();
-	    driver.manage().window().maximize();
-	    lp=new LoginPage(driver);
+	@Before
+	public void before(Scenario scenario) {
+	    this.scenario = scenario;
 	}
-	@When("User give the URL {string}")
-	public void user_give_the_url(String url) throws Exception {
+	
+	@BeforeClass
+	@Given("User luanch browser")
+	public void user_luanch_browser() {
+	   
+		init();
+		lp=new LoginPage(driver);
+		
+	}
+	@When("User give the URL")
+	public void user_give_the_url() throws Exception {
 	    
-		driver.get(url);
+		System.out.println("URL of the application"+prop.getProperty("AppURL"));
 		Thread.sleep(5000);
 	}
-	@When("User enters the username as {string} and password as a {string}")
-	public void user_enters_the_username_as_and_password_as_a(String string, String string2) throws Exception {
+	@When("User enters the username and password")
+	public void user_enters_the_username_and_password() throws Exception {
 	
-		
-		lp.EnterUsername(string);
-		lp.EnterUserpassword(string2);
+		//TCName = scenario.getName();
+		TCName="TC02_InvalidLogin";
+		lp.EnterUsername(data.get(TCName).get("Userid"));
+		lp.EnterUserpassword(data.get(TCName).get("Password"));
 		Thread.sleep(2000);
 	}
 	@When("User click on login button")
 	public void user_click_on_login_button() {
 	    lp.ClickonLogin();
 	}
-	@Then("User should not able to login")
-	public void user_should_not_able_to_login() {
-	    System.out.println("Invalid credentials");
+	@Then("User should be able to login")
+	public void user_should_be_able_to_login() {
+	    
+		lp.VerifyHomePage();
 	}
 
+	
 
 }
